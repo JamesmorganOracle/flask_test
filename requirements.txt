@@ -1,7 +1,7 @@
 Flask==2.1.2
 flask_sqlalchemy==2.5.1
 msal==1.18.0
-numpy==1.20.3
+numpy==1.21.0
 pandas==1.4.2
 pdfkit==1.0.0
 requests==2.28.0
