@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<div>
+    <h1>
+        <center>Flight Info</center>
+    </h1>
+
+    <form action="/" method = "POST">
+        <center>
+            <th>Flight Number</th>
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>Flight Date</th>
+        </center>
+        <br>
+        <center>
+            <input type="text" name="flight number" id="flight number">
+            <input type="date" name="flight date" id="flight date">
+            <br>
+            <th>Direct Alternatives</th>
+            <input type="checkbox" name="DA" id="DA">
+            <th>Indirect Alternatives</th>
+            <input type="checkbox" name="IA" id="IA">
+            <input type="submit" name = "btn" id = "btn" value = "Find">
+            <br>
+            <p style="color:red;">Flight not found, please try again</p>
+        </center>
+        
+    
+    </form>
+</div>
+
+{% endblock %}

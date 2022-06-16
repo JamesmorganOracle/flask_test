@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<script>
+function Export2Word(element, filename = ''){
+    var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
+    var postHtml = "</body></html>";
+    var html = preHtml+document.getElementById(element).innerHTML+postHtml;
+
+    var blob = new Blob(['\ufeff', html], {
+        type: 'application/msword'
+    });
+    
+    // Specify link url
+    var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
+    
+    // Specify file name
+    filename = filename?filename+'.doc':'document.doc';
+    
+    // Create download link element
+    var downloadLink = document.createElement("a");
+
+    document.body.appendChild(downloadLink);
+    
+    if(navigator.msSaveOrOpenBlob ){
+        navigator.msSaveOrOpenBlob(blob, filename);
+    }else{
+        // Create a link to the file
+        downloadLink.href = url;
+        
+        // Setting the file name
+        downloadLink.download = filename;
+        
+        //triggering the function
+        downloadLink.click();
+    }
+    
+    document.body.removeChild(downloadLink);
+}
+</script>
+<script type="text/javascript">
+
+function copytable(el) {
+    var urlField = document.getElementById(el)   
+    var range = document.createRange()
+    range.selectNode(urlField)
+    window.getSelection().addRange(range) 
+    document.execCommand('copy')
+}
+    
+</script>
+<div>
+    
+    <h1>
+        <img src="{{url_for('static', filename='Oracle_logo.jpg')}}"/><center>Flight TEST DA</center>
+    </h1>
+
+    <form action="/" method = "POST">
+        <center>
+            <th>Flight Number</th>
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>Flight Date</th>
+        </center>
+        <br>
+        <center>
+            <input type="text" name="flight number" id="flight number">
+            <input type="date" name="flight date" id="flight date">
+            <br>
+            <th>Direct Alternatives</th>
+            <input type="checkbox" name="DA" id="DA">
+            <th>Indirect Alternatives</th>
+            <input type="checkbox" name="IA" id="IA">
+            <input type="submit" name = "btn" value = "Find">
+            <br>
+            <br>
+            <th>Add alternative airports?</th>
+            <br>
+            <th>Departure</th><th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Arrival</th>
+            <br>
+            <th>IATA &nbsp; Drive distance &nbsp; Drive time&nbsp;&nbsp;</th>
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>IATA &nbsp; Drive distance &nbsp; Drive time&nbsp;&nbsp;</th>
+            <br>
+            <th>{{altdepiata1}} &nbsp; {{altdepdist1}}km &nbsp; {{altdeptime1}}&nbsp;&nbsp;</th><input type = "checkbox" name="altdep1", id = "altdep1">
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>{{altarriata1}} &nbsp; {{altarrdist1}}km &nbsp; {{altarrtime1}}&nbsp;&nbsp;</th><input type = "checkbox" name="altarr1", id = "altarr1">
+            <br>
+            <th>{{altdepiata2}} &nbsp; {{altdepdist2}}km &nbsp; {{altdeptime2}}&nbsp;&nbsp;</th><input type = "checkbox" name="altdep2", id = "altdep2">
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>{{altarriata2}} &nbsp; {{altarrdist2}}km &nbsp; {{altarrtime2}}&nbsp;&nbsp;</th><input type = "checkbox" name="altarr2", id = "altarr2">
+            <br>
+            <th>{{altdepiata3}} &nbsp; {{altdepdist3}}km &nbsp; {{altdeptime3}}&nbsp;&nbsp;</th><input type = "checkbox" name="altdep3", id = "altdep3">
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>{{altarriata3}} &nbsp; {{altarrdist3}}km &nbsp; {{altarrtime3}}&nbsp;&nbsp;</th><input type = "checkbox" name="altarr3", id = "altarr3">
+            <br>
+            <th>{{altdepiata4}} &nbsp; {{altdepdist4}}km &nbsp; {{altdeptime4}}&nbsp;&nbsp;</th><input type = "checkbox" name="altdep4", id = "altdep4">
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>{{altarriata4}} &nbsp; {{altarrdist4}}km &nbsp; {{altarrtime4}}&nbsp;&nbsp;</th><input type = "checkbox" name="altarr4", id = "altarr4">
+            <br>
+            <input type="submit" name = "btn"  value = "Add Alternative airports">
+            <br>
+            <br>
+            <input type="submit" name = "btn"  value = "Generate pdf of this page">
+            <input type="submit" name = "btn"  value = "Generate docx of this page", onclick = "Export2Word('exportContent');">
+        </center>
+
+
+
+    <h3>Flight Info</h3>
+
+    <p>Flight distance: {{fdist}}km</p>
+    <p>EU261: €{{feu261}}</p>
+
+
+    <input type=button value="Copy to Clipboard" onClick="copytable('exportContent')">
+    <div id="exportContent">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Flight No.</th>
+                    <th>Date</th>
+                    <th> Dep Airport</th>
+                    <th> Dep Scheduled</th>
+                    <th> Dep Actual</th>
+                    <th> Arr Airport</th>
+                    <th> Arr Scheduled</th>
+                    <th> Arr Actual</th>
+                    <th> Mins Delay</th>
+                    <th> Status</th>
+
+
+                </tr>
+                {% for flight in flights %}
+                <tr>
+                    <td> {{ flight.flight_iata }} </td>
+                    <td> {{ flight.flight_date.date() }} </td>
+                    <td> {{ flight.departure_iata }}</td>
+                    {% if flight.departure_scheduled == none %}
+                    <td> {{ flight.departure_scheduled }}</td>
+                    {% else %}
+                    <td> {{ flight.departure_scheduled.strftime('%H:%M') }}</td>
+                    {% endif %}
+                    {% if flight.departure_actual == none %}
+                    <td> {{ flight.departure_actual }}</td>
+                    {% else %}
+                    <td> {{ flight.departure_actual.strftime('%H:%M') }}</td>
+                    {% endif %}
+                    <td> {{ flight.arrival_iata }}</td>
+                    {% if flight.arrival_scheduled == none %}
+                    <td> {{ arrival_scheduled }}</td>
+                    {% else %}
+                    <td> {{ flight.arrival_scheduled.strftime('%H:%M') }}</td>
+                    {% endif %}
+                    {% if flight.arrival_actual == none %}
+                    <td> {{ arrival_actual }}</td>
+                    {% else %}
+                    <td> {{ flight.arrival_actual.strftime('%H:%M') }}</td>
+                    {% endif %}
+                    {% if flight.arrival_delay == none %}
+                    <td> {{ flight.arrival_delay }}</td>
+                    {% elif flight.arrival_delay > 60 %}
+                    <td style="background-color:yellow"> {{ flight.arrival_delay }}</td>
+                    {% elif flight.arrival_delay > 180 %}
+                    <td style="background-color: red"> {{ flight.arrival_delay }}</td>
+                    {% else %}
+                    <td> {{ flight.arrival_delay }}</td>
+                    {% endif %}
+                    {% if flight.flight_status == "landed" %}
+                    <td> {{ flight.flight_status }}</td>
+                    {% else %}
+                    <td style="background-color: red"> {{ flight.flight_status }}</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Direct Alternatives ({{n_direct}})</h3>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Flight No.</th>
+                    <th>Date</th>
+                    <th> Dep Airport</th>
+                    <th> Dep Scheduled</th>
+                    <th> Dep Actual</th>
+                    <th> Arr Airport</th>
+                    <th> Arr Scheduled</th>
+                    <th> Arr Actual</th>
+                    <th> Mins Delay</th>
+                    <th> Status</th>
+                </tr>
+            </thead>
+            {% for alternative in directalternatives %}
+            <tbody>
+                <tr>
+                    <td> {{ alternative.flight_iata }} </td>
+                    <td> {{ alternative.flight_date.date() }} </td>
+                    <td> {{ alternative.departure_iata }}</td>
+                    {% if alternative.departure_scheduled == none %}
+                    <td> {{ alternative.departure_scheduled }}</td>
+                    {% else %}
+                    <td> {{ alternative.departure_scheduled.strftime('%H:%M') }}</td>
+                    {% endif %}
+                    {% if alternative.departure_actual == none %}
+                    <td> {{ alternative.departure_actual }}</td>
+                    {% else %}
+                    <td> {{ alternative.departure_actual.strftime('%H:%M') }}</td>
+                    {% endif %}
+                    <td> {{ alternative.arrival_iata }}</td>
+                    {% if alternative.arrival_scheduled == none %}
+                    <td> {{ arrival_scheduled }}</td>
+                    {% else %}
+                    <td> {{ alternative.arrival_scheduled.strftime('%H:%M') }}</td>
+                    {% endif %}
+                    {% if alternative.arrival_actual == none %}
+                    <td> {{ arrival_actual }}</td>
+                    {% else %}
+                    <td> {{ alternative.arrival_actual.strftime('%H:%M') }}</td>
+                    {% endif %}
+                    {% if alternative.arrival_delay == none %}
+                    <td> {{ alternative.arrival_delay }}</td>
+                    {% elif alternative.arrival_delay > 60 %}
+                    <td style="background-color:yellow"> {{ alternative.arrival_delay }}</td>
+                    {% elif alternative.arrival_delay > 180 %}
+                    <td style="background-color: red"> {{ alternative.arrival_delay }}</td>
+                    {% else %}
+                    <td> {{ alternative.arrival_delay }}</td>
+                    {% endif %}
+                    {% if alternative.flight_status == "landed" %}
+                    <td> {{ alternative.flight_status }}</td>
+                    {% else %}
+                    <td style="background-color: red"> {{ alternative.flight_status }}</td>
+                    {% endif %}
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+    </div>
+    </form>
+</div>
+
+
+{% endblock %}

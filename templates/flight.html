@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<div>
+    <h1>
+        <center>Flight TEST Flight</center>
+    </h1>
+
+    <form action="/" method = "POST">
+        <center>
+            <th>Flight Number</th>
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>Flight Date</th>
+        </center>
+        <br>
+        <center>
+            <input type="text" name="flight number" id="flight number">
+            <input type="text" name="flight date" id="flight date">
+            <br>
+            <th>Direct Alternatives</th>
+            <input type="checkbox" name="DA" id="DA">
+            <th>Indirect Alternatives</th>
+            <input type="checkbox" name="IA" id="IA">
+            <input type="submit" value = "Find">
+        </center>
+    <h3>Flight Info</h3>
+
+    <p>Flight distance: {{fdist}}km</p>
+    <p>EU261: €{{feu261}}</p>
+
+    <table class="ws-table-all">
+        <tbody>
+            <tr>
+                <th>Flight Iata</th>
+                <th>Flight Date</th>
+                <th> Departure Iata</th>
+                <th> Departure Scheduled</th>
+                <th> Departure Actual</th>
+                <th> Arrival Iata</th>
+                <th> Arrival Scheduled</th>
+                <th> Arrival Actual</th>
+                <th> Arrival Delay</th>
+                <th> Flight Status</th>
+
+
+            </tr>
+            {% for flight in flights %}
+            <tr>
+                <td> {{ flight.flight_iata }} </td>
+                <td> {{ flight.flight_date.date() }} </td>
+                <td> {{ flight.departure_iata }}</td>
+                <td> {{ flight.departure_scheduled }}</td>
+                <td> {{ flight.departure_actual }}</td>
+                <td> {{ flight.arrival_iata }}</td>
+                <td> {{ flight.arrival_scheduled }}</td>
+                <td> {{ flight.arrival_actual }}</td>
+                <td> {{ flight.arrival_delay }}</td>
+                <td> {{ flight.flight_status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

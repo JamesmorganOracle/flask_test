@@ -1,0 +1,104 @@
+<base href="http://localhost:5000/" target="_blank" />
+<div>
+    <h1>Flight Info</h1>
+
+    <p>This is a separate html file and we can alter this however we want for submission to the court</p>
+
+    <p>Flight distance: {{fdist}}km</p>
+
+
+    <table class="ws-table-all">
+        <thead>
+            <tr>
+                <th>Flight Iata</th>
+                <th>Flight Date</th>
+                <th> Departure Iata</th>
+                <th> Departure Scheduled</th>
+                <th> Departure Actual</th>
+                <th> Arrival Iata</th>
+                <th> Arrival Scheduled</th>
+                <th> Arrival Actual</th>
+                <th> Arrival Delay</th>
+                <th> Flight Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for flight in flights %}
+            <tr>
+                <td> {{ flight.flight_iata }} </td>
+                <td> {{ flight.flight_date.date() }} </td>
+                <td> {{ flight.departure_iata }}</td>
+                <td> {{ flight.departure_scheduled }}</td>
+                <td> {{ flight.departure_actual }}</td>
+                <td> {{ flight.arrival_iata }}</td>
+                <td> {{ flight.arrival_scheduled }}</td>
+                <td> {{ flight.arrival_actual }}</td>
+                {% if flight.arrival_delay == none %}
+                <td> {{ flight.arrival_delay }}</td>
+                {% elif flight.arrival_delay > 60 %}
+                <td style="background-color:#e6b0007f"> {{ flight.arrival_delay }}</td>
+                {% elif flight.arrival_delay > 180 %}
+                <td style="background-color:red;"> {{ flight.arrival_delay }}</td>
+                {% else %}
+                <td> {{ flight.arrival_delay }}</td>
+                {% endif %}
+                {% if flight.flight_status == "landed" %}
+                <td> {{ flight.flight_status }}</td>
+                {% else %}
+                <td style="background-color: red;"> {{ flight.flight_status }}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Direct Alternatives ({{n_direct}})</h3>
+
+    <table class="ws-table-all">
+        <thead>
+            <tr>
+                <th>Flight Iata</th>
+                <th>Flight Date</th>
+                <th> Departure Iata</th>
+                <th> Departure Scheduled</th>
+                <th> Departure Actual</th>
+                <th> Arrival Iata</th>
+                <th> Arrival Scheduled</th>
+                <th> Arrival Actual</th>
+                <th> Arrival Delay</th>
+                <th> Flight Status</th>
+
+            </tr>
+        </thead>
+        <tbody>
+        {% for alternative in directalternatives %}
+            <tr>
+                <td> {{ alternative.flight_iata }} </td>
+                <td> {{ alternative.flight_date.date() }} </td>
+                <td> {{ alternative.departure_iata }}</td>
+                <td> {{ alternative.departure_scheduled }}</td>
+                <td> {{ alternative.departure_actual }}</td>
+                <td> {{ alternative.arrival_iata }}</td>
+                <td> {{ alternative.arrival_scheduled }}</td>
+                <td> {{ alternative.arrival_actual }}</td>
+                {% if alternative.arrival_delay == none %}
+                <td> {{ alternative.arrival_delay }}</td>
+                {% elif alternative.arrival_delay > 60 %}
+                <td style="background-color:#e6b0007f"> {{ alternative.arrival_delay }}</td>
+                {% elif alternative.arrival_delay > 180 %}
+                <td style="background-color: red;"> {{ alternative.arrival_delay }}</td>
+                {% else %}
+                <td> {{ alternative.arrival_delay }}</td>
+                {% endif %}
+                {% if alternative.flight_status == "landed" %}
+                <td> {{ alternative.flight_status }}</td>
+                {% else %}
+                <td style="background-color:red;"> {{ alternative.flight_status }}</td>
+                {% endif %}
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+    </form>
+</div>
+

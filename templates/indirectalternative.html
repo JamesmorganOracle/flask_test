@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<div>
+    <h1>
+        <center>Flight TEST IDA</center>
+    </h1>
+
+    <form action="/" method = "POST">
+        <center>
+            <th>Flight Number</th>
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>Flight Date</th>
+        </center>
+        <br>
+        <center>
+            <input type="text" name="flight number" id="flight number">
+            <input type="text" name="flight date" id="flight date">
+            <br>
+            <th>Direct Alternatives</th>
+            <input type="checkbox" name="DA" id="DA">
+            <th>Indirect Alternatives</th>
+            <input type="checkbox" name="IA" id="IA">
+            <input type="submit" value = "Find">
+            <br>
+            <br>
+            <th>Add alternative airports?</th>
+            <br>
+            <th>Departure</th><th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Arrival</th>
+            <br>
+            <th>IATA &nbsp; Distance &nbsp; Drive time&nbsp;&nbsp;</th>
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>IATA &nbsp; Distance &nbsp; Drive time&nbsp;&nbsp;</th>
+            <br>
+            <th>{{altdepiata1}} &nbsp; {{altdepdist1}}km &nbsp; {{altdeptime1}}&nbsp;&nbsp;</th><input type = "checkbox" name="altdep1", id = "altdep1">
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>{{altarriata1}} &nbsp; {{altarrdist1}}km &nbsp; {{altarrtime1}}&nbsp;&nbsp;</th><input type = "checkbox" name="altarr1", id = "altarr1">
+            <br>
+            <th>{{altdepiata2}} &nbsp; {{altdepdist2}}km &nbsp; {{altdeptime2}}&nbsp;&nbsp;</th><input type = "checkbox" name="altdep2", id = "altdep2">
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>{{altarriata2}} &nbsp; {{altarrdist2}}km &nbsp; {{altarrtime2}}&nbsp;&nbsp;</th><input type = "checkbox" name="altarr2", id = "altarr2">
+            <br>
+            <th>{{altdepiata3}} &nbsp; {{altdepdist3}}km &nbsp; {{altdeptime3}}&nbsp;&nbsp;</th><input type = "checkbox" name="altdep3", id = "altdep3">
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>{{altarriata3}} &nbsp; {{altarrdist3}}km &nbsp; {{altarrtime3}}&nbsp;&nbsp;</th><input type = "checkbox" name="altarr3", id = "altarr3">
+            <br>
+            <th>{{altdepiata4}} &nbsp; {{altdepdist4}}km &nbsp; {{altdeptime4}}&nbsp;&nbsp;</th><input type = "checkbox" name="altdep4", id = "altdep4">
+            <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th>{{altarriata4}} &nbsp; {{altarrdist4}}km &nbsp; {{altarrtime4}}&nbsp;&nbsp;</th><input type = "checkbox" name="altarr4", id = "altarr4">
+
+
+        </center>
+    <h3>Flight Info</h3>
+
+    <p>{{fdist}}</p>
+    <p>{{feu261}}</p>
+
+    <table class="ws-table-all">
+        <tbody>
+            <tr>
+                <th>Flight Iata</th>
+                <th>Flight Date</th>
+                <th> Departure Iata</th>
+                <th> Departure Scheduled</th>
+                <th> Departure Actual</th>
+                <th> Arrival Iata</th>
+                <th> Arrival Scheduled</th>
+                <th> Arrival Actual</th>
+                <th> Arrival Delay</th>
+                <th> Flight Status</th>
+
+
+            </tr>
+            {% for flight in flights %}
+            <tr>
+                <td> {{ flight.flight_iata }} </td>
+                <td> {{ flight.flight_date.date() }} </td>
+                <td> {{ flight.departure_iata }}</td>
+                <td> {{ flight.departure_scheduled }}</td>
+                <td> {{ flight.departure_actual }}</td>
+                <td> {{ flight.arrival_iata }}</td>
+                <td> {{ flight.arrival_scheduled }}</td>
+                <td> {{ flight.arrival_actual }}</td>
+                <td> {{ flight.arrival_delay }}</td>
+                <td> {{ flight.flight_status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    
+    <h3>Indirect Alternatives</h3>
+
+    <table class="ws-table-all">
+        <tr>
+            <th>Flight 1 Iata</th>
+            <th>Flight 1 Date</th>
+            <th>Flight 1 Departure Iata</th>
+            <th>Flight 1 Departure Scheduled</th>
+            <th>Flight 1 Arrival Iata</th>
+            <th>Flight 1 Arrival Scheduled</th>
+            <th>Flight 1 Arrival Actual</th>
+            <th>Flight 1 status</th>
+            <th>Flight 2 Iata</th>
+            <th>Flight 2 Date</th>
+            <th>Flight 2 Departure Iata</th>
+            <th>Flight 2 Departure Scheduled</th>
+            <th>Flight 2 Arrival Iata</th>
+            <th>Flight 2 Arrival Scheduled</th>
+            <th>Flight 2 Arrival Actual</th>
+            <th>Flight 2 status</th>
+
+        </tr>
+        {% for alternative in indirectalternatives %}
+        <tr>
+            <td> {{ alternative.flight_iata_f1 }} </td>
+            <td> {{ alternative.flight_date_f1.date() }}</td>
+            <td> {{ alternative.departure_iata_f1 }}</td>
+            <td> {{ alternative.departure_scheduled_f1 }}</td>
+            <td> {{ alternative.arrival_iata_f1 }}</td>
+            <td> {{ alternative.arrival_scheduled_f1 }}</td>
+            <td> {{ alternative.arrival_actual_f1 }}</td>
+            <td> {{ alternative.flight_status_f1 }}</td>
+            <td> {{ alternative.flight_iata_f2 }} </td>
+            <td> {{ alternative.flight_date_f2.date() }}</td>
+            <td> {{ alternative.departure_iata_f2 }}</td>
+            <td> {{ alternative.departure_scheduled_f2 }}</td>
+            <td> {{ alternative.arrival_iata_f2 }}</td>
+            <td> {{ alternative.arrival_scheduled_f2 }}</td>
+            <td> {{ alternative.arrival_actual_f2 }}</td>
+            <td> {{ alternative.flight_status_f2 }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    </form>
+</div>
+
+{% endblock %}
