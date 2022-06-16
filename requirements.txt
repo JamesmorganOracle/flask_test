@@ -54,7 +54,6 @@ pyparsing==3.0.9
 python-dateutil==2.8.2
 python-docx==0.8.11
 pytz==2021.3
-pywin32==304
 pyzmq==23.1.0
 redis==4.3.1
 requests==2.27.1
